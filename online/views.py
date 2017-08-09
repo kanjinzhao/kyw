@@ -36,7 +36,8 @@ def login(req):
             users = User.objects.filter(username__exact=username,password__exact=passwd)
             if users:
                 response = HttpResponseRedirect('/index')
-                response.set_cookie('username',username,3600)
+                #response.set_cookie('username',username,3600)
+                req.session['username'] = username
                 return response
             else:
                 return HttpResponseRedirect('/login')
@@ -45,7 +46,8 @@ def login(req):
     return render_to_response('login.html',{'uf':uf})
 
 def index(req):
-    username = req.COOKIES.get('username','')
+    #username = req.COOKIES.get('username','')
+    username = req.session.get('username','anybody')
     return render_to_response('index.html',{'username':username})
 
 
